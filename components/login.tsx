@@ -14,7 +14,23 @@ const Login: FC<LoginProps> = ({ setShowLogin }) => {
     const password = formData.get('password')
 
     if (loginOrRegister === 'login') { // login
-      // 
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      })
+      const data = await res.json()
+
+      if (data.status === 'success') {
+        setShowLogin(false)
+      } else {
+        console.log(data)
+      }
     } else { // register
       const res = await fetch('/api/register', {
         method: 'POST',
