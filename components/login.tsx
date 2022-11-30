@@ -1,4 +1,5 @@
 import { type FC, useState } from 'react'
+import user from '../lib/user'
 
 interface LoginProps {
   setShowLogin: React.Dispatch<React.SetStateAction<boolean>>
@@ -27,9 +28,10 @@ const Login: FC<LoginProps> = ({ setShowLogin }) => {
       const data = await res.json()
 
       if (data.status === 'success') {
+        user.email = data.email
         setShowLogin(false)
       } else {
-        console.log(data)
+        alert('Invalid credentials.')
       }
     } else { // register
       const res = await fetch('/api/register', {
