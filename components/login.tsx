@@ -29,7 +29,7 @@ const Login: FC<LoginProps> = ({ setShowLogin }) => {
       if (data.status === 'success') {
         setShowLogin(false)
       } else {
-        console.log(data)
+        alert('Invalid credentials.')
       }
     } else { // register
       const res = await fetch('/api/register', {
