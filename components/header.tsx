@@ -2,16 +2,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { type FC, useState, useEffect } from 'react'
 import Login from './login'
+import user from '../lib/user'
 
 const Header: FC = () => {
   const router = useRouter()
   const route = router.pathname
   const [showLogin, setShowLogin] = useState<boolean>(false)
-  const [user, setUser] = useState<null|string>(null)
-
-  useEffect(() => {
-    // setUser('bob')
-  }, [])
 
   return (
     <header className='pb-10 bg-gray-900'>
@@ -72,8 +68,8 @@ const Header: FC = () => {
                 </Link>
               </li>
               <li>
-                {user && <img className='w-10 h-10 rounded-full' src={`https://robohash.org/${user}`} alt='Rounded avatar' />}
-                {!user && <Link
+                {user.email && <img className='w-10 h-10 rounded-full' src={`https://robohash.org/${user}`} alt='Rounded avatar' />}
+                {!user.email && <Link
                     href={route}
                     className={`block py-1 px-3 bg-white rounded text-blue-500`}
                     onClick={() => setShowLogin(true)}
@@ -81,14 +77,12 @@ const Header: FC = () => {
                     Login
                   </Link>
                 }
-                
               </li>
             </ul>
           </div>
         </div>
       </nav>
 
-      {/* TODO: add another prop that gets current user and displays login or user icon instead */}
       {showLogin && <Login setShowLogin={setShowLogin} />}
     </header>
   )
