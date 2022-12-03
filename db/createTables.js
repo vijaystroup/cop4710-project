@@ -24,7 +24,6 @@ db.query(`
     description VARCHAR(255) NOT NULL,\
     start DATETIME NOT NULL,\
     end DATETIME NOT NULL,\
-    type INT NOT NULL,\
     user_id INT NOT NULL,\
     FOREIGN KEY (user_id) REFERENCES user(id)\
   )`,
@@ -35,14 +34,28 @@ db.query(`
 )
 
 db.query(`
+  CREATE TABLE IF NOT EXISTS survey_question (\
+    id INT AUTO_INCREMENT PRIMARY KEY,\
+    question VARCHAR(255) NOT NULL,\
+    type INT NOT NULL,\
+    survey_id INT NOT NULL,\
+    FOREIGN KEY (survey_id) REFERENCES survey(id)\
+  )`,
+  function (error, results, fields) {
+    if (error) throw error
+    console.log('survey_question table created')
+  }
+)
+
+db.query(`
   CREATE TABLE IF NOT EXISTS survey_response (\
     id INT AUTO_INCREMENT PRIMARY KEY,\
     user_id INT NOT NULL,\
     FOREIGN KEY (user_id) REFERENCES user(id),\
-    survey_id INT NOT NULL,\
-    FOREIGN KEY (survey_id) REFERENCES survey(id),\
+    survey_question_id INT NOT NULL,\
+    FOREIGN KEY (survey_question_id) REFERENCES survey_question(id),\
     response VARCHAR(255) NOT NULL,\
-    CONSTRAINT user_survey_response UNIQUE(user_id, survey_id)\
+    CONSTRAINT user_survey_question_response UNIQUE(user_id, survey_question_id)\
   )`,
   function (error, results, fields) {
     if (error) throw error
