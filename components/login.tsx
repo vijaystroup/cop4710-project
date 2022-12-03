@@ -29,6 +29,7 @@ const Login: FC<LoginProps> = ({ setShowLogin }) => {
 
       if (data.status === 'success') {
         user.email = data.email
+        user.id = data.id
         setShowLogin(false)
       } else {
         alert('Invalid credentials.')
