@@ -9,55 +9,15 @@ interface LoginProps {
 
 const CreateSurveyModal: FC<LoginProps> = ({ setShowCreateSurvey }) => {
 
-//   async function handleLoginOrRegister(e: React.FormEvent<HTMLFormElement>) {
-//     e.preventDefault()
-//     const formData = new FormData(e.currentTarget)
-//     const email = formData.get('email')
-//     const password = formData.get('password')
+  async function handleNewSurvey(e: React.FormEvent<HTMLFormElement>){
+    const formData = new FormData(e.currentTarget)
+    const surveyName = formData.get('surveyName')
+    const surveyDesc = formData.get('surveyDesc')
+    const surveyStart = formData.get('surveyStart')
+    const surveyEnd = formData.get('surveyEnd')
+    
+  }
 
-//     if (loginOrRegister === 'login') { // login
-//       const res = await fetch('/api/login', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           email,
-//           password
-//         })
-//       })
-//       const data = await res.json()
-
-//       if (data.status === 'success') {
-//         user.email = data.email
-//         setShowLogin(false)
-//       } else {
-//         alert('Invalid credentials.')
-//       }
-//     } else { // register
-//       const res = await fetch('/api/register', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           email,
-//           password,
-//           pfpUrl: `https://robohash.org/${email}`
-//         })
-//       })
-//       const data = await res.json()
-
-//       if (res.status === 400)  {
-//         alert('Email already exists')
-//       } else if (res.status === 500) {
-//         alert('Something went wrong.')
-//       } else {
-//         alert('Successfully registered. Please Login.')
-//         setLoginOrRegister('login')
-//       }
-//     }
-//   }
 interface QuestionInterface{
   question: string
   type:number
