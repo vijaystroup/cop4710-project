@@ -1,5 +1,10 @@
 import { type FC } from 'react'
-import { surveyCardInterface } from '../pages/types'
+
+interface surveyCardInterface {
+    surveyName:String,
+    surveyDesc:String,
+    responseCount:Number
+}
 
 const SurveyCards = ({surveyName, surveyDesc, responseCount}: surveyCardInterface) => {
     return(
