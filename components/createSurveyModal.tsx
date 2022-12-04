@@ -1,27 +1,47 @@
 import { type FC, useState } from 'react'
 import { render } from 'react-dom'
 import user from '../lib/user'
-import Question from './question'
 
 interface LoginProps {
   setShowCreateSurvey: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const CreateSurveyModal: FC<LoginProps> = ({ setShowCreateSurvey }) => {
-
   async function handleNewSurvey(e: React.FormEvent<HTMLFormElement>){
+    e.preventDefault()
     const formData = new FormData(e.currentTarget)
-    const surveyName = formData.get('surveyName')
-    const surveyDesc = formData.get('surveyDesc')
-    const surveyStart = formData.get('surveyStart')
-    const surveyEnd = formData.get('surveyEnd')
+    console.log(formData)
+  //   const surveyName = formData.get('surveyName')
+  //   const surveyDesc = formData.get('surveyDesc')
+  //   const surveyStart = formData.get('surveyStart')
+  //   const surveyEnd = formData.get('surveyEnd')
     
-  }
+  // const res = await fetch('/api/createSurvey', {
+  //   method: 'POST',
+  //   headers:{
 
-interface QuestionInterface{
-  question: string
-  type:number
-}
+  //   },
+  //   body: JSON.stringify({
+  //     surveyName,
+  //     surveyDesc,
+  //     surveyStart,
+  //     surveyEnd
+  //   })
+  // })
+  // const data = await res.json()
+
+  // if (data.status === 'success') {
+  //   setShowCreateSurvey(false)
+  // } else {
+  //   alert('Invalid credentials.')
+  // }
+
+  }
+  
+  interface QuestionInterface{
+    question: string
+    type:number
+  }
   const [questions, setQuestions] = useState<QuestionInterface[]>([])
   return (
     <div id='survey-modal' tabIndex={-1} aria-hidden='true' className='fixed top-0 left-0 right-0 z-50 items-center justify-center w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal mb-2'>
@@ -33,7 +53,7 @@ interface QuestionInterface{
             </button>
             <div className='px-6 py-6 lg:px-8'>
               <h3 className='mb-4 text-xl font-medium text-gray-900 dark:text-white'>Create Survey</h3>
-              <form className='space-y-6'>
+              <form className='space-y-6' onSubmit={handleNewSurvey}>
                 <div>
                     <label htmlFor='surveyName' className='block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300'>Survey Name</label>
                     <input type='surveyName' name='surveyName' id='surveyName' className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white' placeholder='"Survey Name"' required />
@@ -59,7 +79,17 @@ interface QuestionInterface{
                 </div>
                 <div>
                     {questions.map((question,i) =>(
-                      <Question></Question>
+                      <div key={i} className="relative w-full lg:max-w-sm">
+                        <div>
+                            <input className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white mb-5' placeholder='Question' required></input>
+                        </div>
+                        <div className="pb-5">
+                            <select /*onChange={}*/className="w-8/12 p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600">
+                              <option value={1}>Question Type 1</option>
+                              <option value={2}>Question Type 2</option>
+                            </select>
+                        </div>
+                      </div>
                     ))}
                 </div>
                 <div>

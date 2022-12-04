@@ -13,13 +13,13 @@ export default function handler(
     const { surveyName, surveyDesc, surveyStart, surveyEnd } = req.body
 
     db.query(`
-        INSERT INTO survey (title, description, start, end, user_id)\
+        INSERT INTO survey_question (survey_id, question, type)\
         VALUES (?, ?, ?, ?, ?)
-    `, [surveyName, surveyDesc, surveyStart, surveyEnd, user.id],
-  function (error, results, fields) {
-    if (error) throw error
-    const survey_id = results.insertId
-    console.log('survey created')
-  }
-)
+        `, [surveyName, surveyDesc, surveyStart, surveyEnd, user.id],
+        function (error, results, fields) {
+            if (error) throw error
+            const survey_id = results.insertId
+            console.log('survey created')
+        }
+    )
 }
