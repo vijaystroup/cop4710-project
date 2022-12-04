@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
-    "mysql": "^2.18.1",
+    "mysql-await": "^2.2.2",
     "next": "13.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
