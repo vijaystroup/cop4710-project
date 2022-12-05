@@ -25,7 +25,7 @@ const SurveyCards: FC <surveyCardInterface> = ({surveyName, surveyDesc, id, star
             <p className="font-normal text-gray-600 dark:text-gray-400">{surveyDesc}</p>
             <div className="flex items-center justify-between space-x-10">
                 <p className="font-normal text-gray-600 dark:text-white">Start: {new Date(start).toLocaleDateString("en-US")}</p>
-                <p className="font-normal text-gray-600 dark:text-white">End: {new Date(start).toLocaleDateString("en-US")}</p>
+                <p className="font-normal text-gray-600 dark:text-white">End: {new Date(end).toLocaleDateString("en-US")}</p>
             </div>
         </Link>
     )
