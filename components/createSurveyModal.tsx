@@ -42,7 +42,7 @@ const CreateSurveyModal: FC<LoginProps> = ({ setShowCreateSurvey }) => {
   if (data.status === 'success') {
     setShowCreateSurvey(false)
   } else {
-    alert('Invalid credentials.')
+    alert('Error Creating Survey.')
   }
 
   }

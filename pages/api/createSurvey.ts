@@ -3,7 +3,7 @@ import db from '../../db/client'
 
 
 type Data = {
-  email: string
+  status: "success"|"error"
 }
 
 export default async function handler(
@@ -12,7 +12,8 @@ export default async function handler(
 ) {
     const { surveyName, surveyDesc, surveyStart, surveyEnd, user_id, questions } = req.body
     console.log(req.body.surveyName, surveyDesc, surveyStart, surveyEnd, questions)
-    const results = await db.awaitQuery(`
+    try{
+      const results = await db.awaitQuery(`
         INSERT INTO survey (title, description, start, end, user_id)\
         VALUES (?, ?, ?, ?, ?)
     `, [surveyName, surveyDesc, surveyStart, surveyEnd, user_id]
@@ -24,10 +25,18 @@ export default async function handler(
         VALUES (?, ?, ?)
         `, [results.insertId, question.question, question.type],
         function (error, results) {
-            if (error) throw error
+            if (error) {
+             res.status(500).json({status: 'error' })
+              throw error
+            }
             const question_id = results.insertId
             console.log('question created')
-        }
-    )
-  }
+          }
+     )
+    }
+    res.status(200).json({status: 'success' })
+    } catch{
+      res.status(500).json({status: 'error' })
+    }
+    
 }
