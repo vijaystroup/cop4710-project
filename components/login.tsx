@@ -1,11 +1,14 @@
+import { useRouter } from 'next/router'
 import { type FC, useState } from 'react'
 import user from '../lib/user'
+
 
 interface LoginProps {
   setShowLogin: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const Login: FC<LoginProps> = ({ setShowLogin }) => {
+  const router = useRouter();
   const [loginOrRegister, setLoginOrRegister] = useState<'login' | 'register'>('login')
 
   async function handleLoginOrRegister(e: React.FormEvent<HTMLFormElement>) {
@@ -31,6 +34,7 @@ const Login: FC<LoginProps> = ({ setShowLogin }) => {
         user.email = data.email
         user.id = data.id
         setShowLogin(false)
+        router.push(router.pathname)
       } else {
         alert('Invalid credentials.')
       }

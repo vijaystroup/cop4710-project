@@ -3,9 +3,17 @@ import Head from 'next/head'
 import Header from '../../components/header'
 import SurveyCards from '../../components/surveyCards'
 import db from '../../db/client'
+import user from '../../lib/user'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const results = await db.awaitQuery(`SELECT * FROM survey`)
+  const results = await db.awaitQuery(
+    `SELECT *\
+    FROM survey`
+  )
+
+  console.log('User ID: ' + user.id);
+  
+  console.log(results);
 
   return {
     props: {
@@ -41,6 +49,7 @@ const Surveys: NextPage<SurveysProps> = (props) => {
 
       <Header />
 
+      {user.email &&  
       <main className='h-[calc(100vh-80px-40px)] bg-gray-900 px-10'>
         <h1 className='p-4 mb-4 text-5xl font-bold text-center text-red-600'>Surveys</h1>
 
@@ -55,8 +64,8 @@ const Surveys: NextPage<SurveysProps> = (props) => {
               />
             )
           })}
-        </div>
-      </main>
+        </div>  
+      </main> }
     </>
   )
 }
