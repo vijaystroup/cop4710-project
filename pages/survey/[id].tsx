@@ -10,11 +10,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     FROM survey_question\ 
     INNER JOIN survey\
     ON survey.id = survey_question.survey_id\
-    WHERE survey.id LIKE ?`,
-    [context.query.id]
+    WHERE survey.id = ?`,
+    [parseInt(context.query.id as string)]
   );
-
-  console.log(results);
 
   const questions = results.map(res => ({ 
     question: res.question, 
