@@ -8,7 +8,7 @@ interface LoginProps {
 }
 
 const Login: FC<LoginProps> = ({ setShowLogin }) => {
-  const router = useRouter();
+  const router = useRouter()
   const [loginOrRegister, setLoginOrRegister] = useState<'login' | 'register'>('login')
 
   async function handleLoginOrRegister(e: React.FormEvent<HTMLFormElement>) {
@@ -34,7 +34,7 @@ const Login: FC<LoginProps> = ({ setShowLogin }) => {
         user.email = data.email
         user.id = data.id
         setShowLogin(false)
-        router.push(router.pathname)
+        router.push('/auth-redirect')
       } else {
         alert('Invalid credentials.')
       }
