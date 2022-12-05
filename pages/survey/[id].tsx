@@ -27,6 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       start: results[0].start.toString(),
       description: results[0].description,
       questions: questions,
+      creator: results[0].user_id
     }
   }
 }
@@ -37,7 +38,8 @@ interface SurveyProps {
   description: string,
   start: string
   end: string,
-  questions: {question: string, type: number}[],
+  questions: {question: string, type: number}[]
+  creator: number,
 }
 
 const Survey: NextPage<SurveyProps> = (props) => {
