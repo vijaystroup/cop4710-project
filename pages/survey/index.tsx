@@ -5,7 +5,8 @@ import SurveyCards from '../../components/surveyCards'
 import db from '../../db/client'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const results = await db.awaitQuery(`SELECT * FROM survey`)
+  const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ')
+  const results = await db.awaitQuery(`SELECT * FROM survey WHERE start <= '${currentDate}' AND end >= '${currentDate}' ORDER BY id DESC`)
 
   return {
     props: {
@@ -52,6 +53,8 @@ const Surveys: NextPage<SurveysProps> = (props) => {
                 surveyName={survey.title}
                 surveyDesc={survey.description}
                 id={survey.id}
+                start={survey.start}
+                end={survey.end}
               />
             )
           })}
