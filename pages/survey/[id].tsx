@@ -51,16 +51,17 @@ const Survey: NextPage<SurveyProps> = (props) => {
       </Head>
 
       <Header />
-
-      <SurveyInfoCard
-        key={Math.random()}
-        id={props.id}
-        title={props.title}
-        desc={props.description}
-        questions={props.questions}
-        start={props.start}
-        end={props.end}
-      />
+      <main className='h-[calc(100vh-80px-40px)] bg-gray-900 px-10'>
+        <SurveyInfoCard
+          key={Math.random()}
+          id={props.id}
+          title={props.title}
+          desc={props.description}
+          questions={props.questions}
+          start={props.start}
+          end={props.end}
+        />
+      </main>
     </>
   )
 }
