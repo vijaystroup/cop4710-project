@@ -1,14 +1,10 @@
 import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import Header from '../../components/header'
 import db from '../../db/client.js'
 import SurveyInfoCard from '../../components/surveyInfoCard'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-
-  // console.log(context.query);
-
   const results = await db.awaitQuery(
     `SELECT *\
     FROM survey_question\ 
