@@ -10,31 +10,40 @@ const CreateSurveyModal: FC<LoginProps> = ({ setShowCreateSurvey }) => {
   async function handleNewSurvey(e: React.FormEvent<HTMLFormElement>){
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
-    console.log(formData)
-  //   const surveyName = formData.get('surveyName')
-  //   const surveyDesc = formData.get('surveyDesc')
-  //   const surveyStart = formData.get('surveyStart')
-  //   const surveyEnd = formData.get('surveyEnd')
-    
-  // const res = await fetch('/api/createSurvey', {
-  //   method: 'POST',
-  //   headers:{
+    // console.log(formData)
+    const surveyName = formData.get('surveyName')
+    const surveyDesc = formData.get('surveyDesc')
+    const surveyStart = formData.get('surveyStart')
+    const surveyEnd = formData.get('surveyEnd')
+    const questionNames = Array.from(formData.keys()).filter(k => k.startsWith('question_name_'))
+    const questionTypes = Array.from(formData.keys()).filter(k => k.startsWith('question_type_'))
+    const questions = []
 
-  //   },
-  //   body: JSON.stringify({
-  //     surveyName,
-  //     surveyDesc,
-  //     surveyStart,
-  //     surveyEnd
-  //   })
-  // })
-  // const data = await res.json()
+    for(let i = 0; i < questionNames.length; i++){
+      questions.push({question: formData.get(questionNames[i]), type:formData.get(questionTypes[i])})
+    }
+    // console.log(questions)
+  const res = await fetch('/api/createSurvey', {
+    method: 'POST',
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      surveyName,
+      surveyDesc,
+      surveyStart,
+      surveyEnd,
+      user_id: user.id,
+      questions
+    })
+  })
+  const data = await res.json()
 
-  // if (data.status === 'success') {
-  //   setShowCreateSurvey(false)
-  // } else {
-  //   alert('Invalid credentials.')
-  // }
+  if (data.status === 'success') {
+    setShowCreateSurvey(false)
+  } else {
+    alert('Invalid credentials.')
+  }
 
   }
   
