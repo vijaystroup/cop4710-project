@@ -10,16 +10,16 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-    const { surveyName, surveyDesc, surveyStart, surveyEnd } = req.body
+    const { survey_id, question, type } = req.body
 
     db.query(`
         INSERT INTO survey_question (survey_id, question, type)\
-        VALUES (?, ?, ?, ?, ?)
-        `, [surveyName, surveyDesc, surveyStart, surveyEnd, user.id],
-        function (error, results, fields) {
+        VALUES (?, ?, ?)
+        `, [survey_id, question, type],
+        function (error, results) {
             if (error) throw error
-            const survey_id = results.insertId
-            console.log('survey created')
+            const question_id = results.insertId
+            console.log('question created')
         }
     )
 }
