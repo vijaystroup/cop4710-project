@@ -14,7 +14,7 @@ export default function handler(
   const { email, password } = req.body
 
   db.query(`
-    SELECT email FROM user WHERE email=? AND password=?
+    SELECT id, email FROM user WHERE email=? AND password=?
   `, [email, password],
     (error, results, fields) => {
       if (results.length > 0) {
