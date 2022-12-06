@@ -2,28 +2,35 @@ import { type FC } from 'react'
 
 interface questionInfo {
 	question: string,
+	responses: string[],
 	type: number
+	owner: boolean
 }
 
-const DisplayQuestion: FC = ({type, question}: questionInfo) => {
+const DisplayQuestion: FC = ({type, question, responses, owner}: questionInfo) => {
 	if (type === 1) {
+		const arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length
+		const avg = arrAvg(responses.map(c => +c))
+ 
 		return (
 			<>
-				<li className='text-m text-gray-900 dark:text-white'>
+				<li className='font-bold text-gray-900 text-m dark:text-white'>
 					{question}
 				</li>
 
-				<div className="form-check">
-					<input type="number" className='mb-4' placeholder='1' min={1} max={5}/>
+				<div className="mb-4 form-check">
+					{owner && <p className='text-lg text-white'>Average: {avg}</p>}
+					{!owner && <input type="number" className='mb-4' placeholder='1' min={1} max={5}/>}
     		</div>
 			</>
 		)
 	}
 
 	else {
+		console.log(responses)
 		return (
 			<>
-				<li className='text-m text-gray-900 dark:text-white'>
+				<li className='font-bold text-gray-900 text-m dark:text-white'>
 					{question}
 				</li>
 				

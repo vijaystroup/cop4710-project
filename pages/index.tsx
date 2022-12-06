@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
+import AddSurveyButton from '../components/addSurveyButton'
 import Header from '../components/header'
 import SurveyCards from '../components/surveyCards'
 import user from '../lib/user'
@@ -41,6 +42,7 @@ const Home: NextPage = () => {
       <main className='h-[calc(100vh-80px-40px)] bg-gray-900 px-10'>
         {!user.email && <h1 className='p-4 mb-4 text-5xl font-bold text-center text-red-600'>Sign in to get started!</h1>}
         {user.email && <h1 className='p-4 mb-4 text-5xl font-bold text-center text-red-600'>Welcome, {user.email.split('@')[0]}!</h1>}
+        {user.email && <AddSurveyButton />}
         {surveys && 
           <div className='flex flex-wrap justify-center gap-4'>
             {surveys.map(survey => {

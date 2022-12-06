@@ -8,16 +8,34 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const results = await db.awaitQuery(
     `SELECT *\
     FROM survey_question\ 
-    INNER JOIN survey\
-    ON survey.id = survey_question.survey_id\
+    INNER JOIN survey ON survey.id = survey_question.survey_id\
     WHERE survey.id = ?`,
     [parseInt(context.query.id as string)]
   );
 
+  const responses = []
+  for (const result of results) {
+    const dbresponses = await db.awaitQuery(`
+      SELECT *\
+      FROM survey_response\
+      WHERE survey_question_id = ?`, [result.id]
+    )
+
+    for (const dbresponse of dbresponses) {
+      responses.push({
+        survey_question_id: dbresponse.survey_question_id,
+        response: dbresponse.response
+      })
+    }
+  }
+
   const questions = results.map(res => ({ 
-    question: res.question, 
-    type: res.type 
+    question: res.question,
+    id: res.id, 
+    type: res.type
   }))
+
+  console.log(responses)
 
   return {
     props: {
@@ -27,6 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       start: results[0].start.toString(),
       description: results[0].description,
       questions: questions,
+      responses: responses,
       creator: results[0].user_id
     }
   }
@@ -39,11 +58,12 @@ interface SurveyProps {
   start: string
   end: string,
   questions: {question: string, type: number}[]
+  responses: {question: string, response: string}[]
   creator: number,
 }
 
 const Survey: NextPage<SurveyProps> = (props) => {
-
+  console.log(props.creator)
   return (
     <>
       <Head>
@@ -58,8 +78,10 @@ const Survey: NextPage<SurveyProps> = (props) => {
           title={props.title}
           desc={props.description}
           questions={props.questions}
+          responses={props.responses}
           start={props.start}
           end={props.end}
+          creator={props.creator}
         />
       </main>
     </>
