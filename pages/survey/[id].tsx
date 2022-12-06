@@ -6,9 +6,9 @@ import SurveyInfoCard from '../../components/surveyInfoCard'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const results = await db.awaitQuery(
-    `SELECT *\
+    `SELECT *, survey_question.id\
     FROM survey_question\ 
-    INNER JOIN survey ON survey.id = survey_question.survey_id\
+    LEFT JOIN survey ON survey.id = survey_question.survey_id\
     WHERE survey.id = ?`,
     [parseInt(context.query.id as string)]
   );
@@ -55,13 +55,12 @@ interface SurveyProps {
   description: string,
   start: string
   end: string,
-  questions: {question: string, type: number}[]
+  questions: {id: number, question: string, type: number}[]
   responses: {question: string, response: string}[]
   creator: number,
 }
 
 const Survey: NextPage<SurveyProps> = (props) => {
-  console.log(props.creator)
   return (
     <>
       <Head>
