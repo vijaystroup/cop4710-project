@@ -13,9 +13,21 @@ interface surveyInfoInterface {
 	}[],
 }
 
+const deleteSurvey = async (survey_id) => {
+	const res = await fetch('/api/deleteSurvey', {
+    method: 'DELETE',
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+			survey_id,
+    })
+  })
+  const resData = await res.json()
+	console.log(resData);
+}
 
-
-const SurveyInfoCard: FC = ({title, desc, questions, start, end}: surveyInfoInterface) => {
+const SurveyInfoCard: FC = ({id, title, desc, questions, start, end}: surveyInfoInterface) => {
 		
 	const startDate = new Date(start)
 	const endDate = new Date(end)
@@ -53,9 +65,15 @@ const SurveyInfoCard: FC = ({title, desc, questions, start, end}: surveyInfoInte
 								})}
 							</ol>
 
-							<button className='w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
-									HELLOOOO
-							</button>
+							<div className='flex justify-center'>
+								<button className='m-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+									Submit
+								</button>
+
+								<button onClick={() => deleteSurvey(id)} className='m-4 w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800'>
+									Delete
+								</button> 
+							</div>
 						</div>
 					</div>
 				</div>
