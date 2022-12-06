@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { type FC } from 'react'
 import DisplayQuestion from '../components/displayQuestion'
 import user from '../lib/user'
@@ -21,6 +22,7 @@ interface surveyInfoInterface {
 }
 
 const SurveyInfoCard: FC<surveyInfoInterface> = ({title, desc, questions, responses, start, end, creator}) => {
+	const router = useRouter()
 	const startDate = new Date(start)
 	const endDate = new Date(end)
 	const currentDate = new Date(new Date().toISOString().slice(0, 19).replace('T', ' '))
@@ -44,8 +46,30 @@ const SurveyInfoCard: FC<surveyInfoInterface> = ({title, desc, questions, respon
 	async function submitSurvey(e) {
 		e.preventDefault()
 
-		// get form elements and call api
-		
+		const numberInputElements = document.getElementsByTagName('input')
+		const textInputElements = document.getElementsByTagName('textarea')
+
+		const numberInputs = Array.from(numberInputElements).map(e => ({id: e.name.split('_')[1], value: e.value.valueOf()}))
+		const textInputs = Array.from(textInputElements).map(e => ({id: e.name.split('_')[1], value: e.value.valueOf()}))
+
+		const res = await fetch('/api/responses', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				responses: numberInputs.concat(textInputs),
+				user_id: user.id,
+			})
+		})
+		const data = await res.json()
+		if (data.status === 'error') {
+			alert('There was an error submitting your survey. Please try again.')
+			return
+		} else {
+			alert('Your survey was successfully submitted!')
+			router.push('/survey')
+		}
 	}
 
 	return(
@@ -73,7 +97,7 @@ const SurveyInfoCard: FC<surveyInfoInterface> = ({title, desc, questions, respon
 										<>
 											<DisplayQuestion 
 												key={i}
-												question={question_info.question}
+												question={{q: question_info.question, id: question_info.id}}
 												responses={responses.filter(response => response.survey_question_id === question_info.id).map(response => response.response)}
 												type={question_info.type}
 												owner={owner}
@@ -83,7 +107,7 @@ const SurveyInfoCard: FC<surveyInfoInterface> = ({title, desc, questions, respon
 								})}
 							</ol>
 
-							{!owner && <button onClick={submitSurvey} disabled={!isActive} className='w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-slate-500 disabled:hover:bg-slate-500 disabled:focus:bg-slate-500'>
+							{!owner && user.email && <button onClick={submitSurvey} disabled={!isActive} className='w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-slate-500 disabled:hover:bg-slate-500 disabled:focus:bg-slate-500'>
 								{isActive ? 'Submit' : 'Survey Closed'}
 							</button>}
 
