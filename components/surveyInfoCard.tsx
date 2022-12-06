@@ -21,7 +21,7 @@ interface surveyInfoInterface {
 	creator: number
 }
 
-const SurveyInfoCard: FC<surveyInfoInterface> = ({title, desc, questions, responses, start, end, creator}) => {
+const SurveyInfoCard: FC<surveyInfoInterface> = ({id, title, desc, questions, responses, start, end, creator}) => {
 	const router = useRouter()
 	const startDate = new Date(start)
 	const endDate = new Date(end)
@@ -30,18 +30,27 @@ const SurveyInfoCard: FC<surveyInfoInterface> = ({title, desc, questions, respon
 	const owner = user.id === creator
   
   const deleteSurvey = async (survey_id) => {
-	const res = await fetch('/api/deleteSurvey', {
-    method: 'DELETE',
-    headers:{
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-			survey_id,
-    })
-  })
-  const resData = await res.json()
-	console.log(resData);
-}
+		const confirm = window.confirm()
+		if (!confirm) return
+		const res = await fetch('/api/deleteSurvey', {
+			method: 'DELETE',
+			headers:{
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				survey_id,
+			})
+		})
+		const resData = await res.json()
+		
+		if (resData.status === 'error') {
+			alert('There was an error deleting your survey. Please try again.')
+			return
+		} else {
+			alert('Your survey was successfully deleted!')
+			router.push('/')
+		}
+	}
 
 	async function submitSurvey(e) {
 		e.preventDefault()
@@ -64,7 +73,8 @@ const SurveyInfoCard: FC<surveyInfoInterface> = ({title, desc, questions, respon
 		})
 		const data = await res.json()
 		if (data.status === 'error') {
-			alert('There was an error submitting your survey. Please try again.')
+			alert('Can not submit the same survey again.')
+			router.push('/survey')
 			return
 		} else {
 			alert('Your survey was successfully submitted!')
@@ -111,10 +121,9 @@ const SurveyInfoCard: FC<surveyInfoInterface> = ({title, desc, questions, respon
 								{isActive ? 'Submit' : 'Survey Closed'}
 							</button>}
 
-								<button onClick={() => deleteSurvey(id)} className='m-4 w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800'>
-									Delete
-								</button> 
-							</div>
+							{owner && <button onClick={() => deleteSurvey(id)} className='m-4 w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800'>
+								Delete
+							</button>}
 						</div>
 					</div>
 				</div>

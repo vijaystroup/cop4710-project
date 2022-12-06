@@ -25,7 +25,7 @@ db.query(`
     start DATETIME NOT NULL,\
     end DATETIME NOT NULL,\
     user_id INT NOT NULL,\
-    FOREIGN KEY (user_id) REFERENCES user(id)\
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE\
   )`,
   function (error, results, fields) {
     if (error) throw error
@@ -39,7 +39,7 @@ db.query(`
     question VARCHAR(255) NOT NULL,\
     type INT NOT NULL,\
     survey_id INT NOT NULL,\
-    FOREIGN KEY (survey_id) REFERENCES survey(id)\
+    FOREIGN KEY (survey_id) REFERENCES survey(id) ON DELETE CASCADE\
   )`,
   function (error, results, fields) {
     if (error) throw error
@@ -51,9 +51,9 @@ db.query(`
   CREATE TABLE IF NOT EXISTS survey_response (\
     id INT AUTO_INCREMENT PRIMARY KEY,\
     user_id INT NOT NULL,\
-    FOREIGN KEY (user_id) REFERENCES user(id),\
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,\
     survey_question_id INT NOT NULL,\
-    FOREIGN KEY (survey_question_id) REFERENCES survey_question(id),\
+    FOREIGN KEY (survey_question_id) REFERENCES survey_question(id) ON DELETE CASCADE,\
     response VARCHAR(255) NOT NULL,\
     CONSTRAINT user_survey_question_response UNIQUE(user_id, survey_question_id)\
   )`,
@@ -62,19 +62,5 @@ db.query(`
     console.log('survey_response table created')
   }
 )
-
-// db.query(`
-//   CREATE TABLE IF NOT EXISTS survey_email (
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     survey_id INT NOT NULL,
-//     FOREIGN KEY (survey_id) REFERENCES survey(id)
-//     email VARCHAR(255) NOT NULL
-//     UNIQUE (survey_id, email)
-//   )`,
-//   function (error, results, fields) {
-//     if (error) throw error
-//     console.log('survey_email table created')
-//   }
-// )
 
 db.end()

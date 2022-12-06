@@ -9,19 +9,19 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const { responses, user_id } = req.body
-  console.log(responses)
-  console.log(user_id)
-  // responses: { question_id: number, response: string }[]
-  try {
-    for (const response of responses) {
-      const results = await db.awaitQuery(
-        'INSERT INTO survey_response (user_id, survey_question_id, response)\
-          VALUES (?,?,?)',
-        [user_id, response.id, response.value]
-      )
-    }
-    res.status(200).json({ status: 'success' })
-  } catch {
-    res.status(500).json({ status: 'error' })
+
+  for (const response of responses) {
+    db.query(
+      'INSERT INTO survey_response (user_id, survey_question_id, response)\
+        VALUES (?,?,?)',
+      [user_id, response.id, response.value],
+      (error, results, fields) => {
+        if (!error) {
+          res.status(200).json({ status: 'success' })
+        } else {
+          res.status(500).json({ status: 'error' })
+        }
+      }
+    )
   }
 }

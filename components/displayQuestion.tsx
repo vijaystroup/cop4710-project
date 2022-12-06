@@ -19,7 +19,7 @@ const DisplayQuestion: FC = ({type, question, responses, owner}: questionInfo) =
 				</li>
 
 				<div className="mb-4 form-check">
-					{owner && <p className='text-white text-md'>Average: {avg}</p>}
+					{owner && <p className='text-white text-md'>Average: {avg ? avg : 'N/A'}</p>}
 					{!owner && <input required defaultValue={1} type="number" className='mb-4' min={1} max={5} name={`type1q_${question.id}`} />}
     		</div>
 			</>
@@ -37,7 +37,8 @@ const DisplayQuestion: FC = ({type, question, responses, owner}: questionInfo) =
 					{!owner && <textarea name={`type2q_${question.id}`} maxLength={200} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
 						placeholder="Write your thoughts here...">
 					</textarea>}
-					{owner && responses.map(res => <p className='text-white text-md'>{'>'} {res}</p>)}
+					{owner && responses.length && responses.map(res => <p className='text-white text-md'>{'>'} {res}</p>)}
+					{owner && !responses && <p className='text-white text-md'>N/A</p>}
 				</li>
 			</>
 		)
