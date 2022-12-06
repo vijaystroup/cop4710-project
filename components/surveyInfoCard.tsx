@@ -26,6 +26,20 @@ const SurveyInfoCard: FC<surveyInfoInterface> = ({title, desc, questions, respon
 	const currentDate = new Date(new Date().toISOString().slice(0, 19).replace('T', ' '))
 	const isActive = startDate <= currentDate && currentDate <= endDate
 	const owner = user.id === creator
+  
+  const deleteSurvey = async (survey_id) => {
+	const res = await fetch('/api/deleteSurvey', {
+    method: 'DELETE',
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+			survey_id,
+    })
+  })
+  const resData = await res.json()
+	console.log(resData);
+}
 
 	async function submitSurvey(e) {
 		e.preventDefault()
@@ -72,6 +86,11 @@ const SurveyInfoCard: FC<surveyInfoInterface> = ({title, desc, questions, respon
 							{!owner && <button onClick={submitSurvey} disabled={!isActive} className='w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-slate-500 disabled:hover:bg-slate-500 disabled:focus:bg-slate-500'>
 								{isActive ? 'Submit' : 'Survey Closed'}
 							</button>}
+
+								<button onClick={() => deleteSurvey(id)} className='m-4 w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800'>
+									Delete
+								</button> 
+							</div>
 						</div>
 					</div>
 				</div>
